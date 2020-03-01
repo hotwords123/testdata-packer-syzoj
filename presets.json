@@ -1,0 +1,30 @@
+[
+    {
+        "name": "子文件夹",
+        "description": "适用于分子任务存放在子文件夹下的测试数据，如 subtask1/1.in",
+        "input": {
+            "pattern": "(.+)\\\\(.+)\\.in",
+            "subtask": [1],
+            "case": [2]
+        },
+        "output": {
+            "pattern": "(.+)\\\\(.+)\\.(out|ans)",
+            "subtask": [1],
+            "case": [2]
+        }
+    },
+    {
+        "name": "fzsz",
+        "description": "格式：problem(subtask)-(case)",
+        "input": {
+            "pattern": ".+\\((.+)\\)-\\((.+)\\)\\.in",
+            "subtask": [1],
+            "case": [2]
+        },
+        "output": {
+            "pattern": ".+\\((.+)\\)-\\((.+)\\)\\.(out|ans)",
+            "subtask": [1],
+            "case": [2]
+        }
+    }
+]
