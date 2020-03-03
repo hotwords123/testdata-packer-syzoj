@@ -7,19 +7,33 @@ import re
 import random
 import zipfile
 
+
 def main(argv):
 
     preset_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "presets.json")
-    
+
     try:
         with open(preset_path, 'rb') as f:
-            presets = json.loads(f.read().decode(encoding = 'utf8'))
-    except FileNotFoundError as e:
+            presets = json.loads(f.read().decode(encoding='utf8'))
+    except FileNotFoundError:
         print("找不到配置文件 %s。" % os.path.basename(preset_path))
-    
+
     if len(presets) == 0:
         print("未找到可用的预设。")
         return
+
+    if len(argv) > 1:
+        print("用法：main.py [测试数据存放路径]")
+        return
+    if len(argv) == 1:
+        data_path = argv[0]
+    else:
+        try:
+            data_path = input("输入测试数据存放路径（留空默认为当前路径）：")
+        except BaseException:
+            data_path = ''
+        if data_path == '':
+            data_path = '.'
 
     print("可用的预设：")
 
@@ -49,15 +63,13 @@ def main(argv):
         return
     except EOFError:
         return
-    
+
     preset = presets[choice - 1]
 
     re_file = {
         "input": re.compile('^' + preset["input"]["pattern"] + '$'),
         "output": re.compile('^' + preset["output"]["pattern"] + '$')
     }
-
-    data_path = argv[0] if len(argv) == 1 else '.'
 
     subtasks = {}
 
@@ -69,12 +81,12 @@ def main(argv):
             subtasks[name_subtask] = {}
         subtask = subtasks[name_subtask]
         if name_case not in subtask:
-            subtask[name_case] = { "input": [], "output": [] }
+            subtask[name_case] = {"input": [], "output": []}
         return subtask[name_case]
-    
+
     def handle_file(file_path, file_type):
-        mat = re_file[file_type].match(file_path)
-        if mat != None:
+        mat = re_file[file_type].match(file_path.replace('\\', '/'))
+        if mat is not None:
             name_subtask = extract_id(mat, preset[file_type]["subtask"])
             name_case = extract_id(mat, preset[file_type]["case"])
             case = find_case(name_subtask, name_case)
@@ -95,7 +107,7 @@ def main(argv):
     name_prefix = input("输入文件名前缀（可以为空）：")
 
     print("处理结果：")
-    
+
     error_cnt = 0
     tasks = []
     yaml = []
@@ -129,7 +141,7 @@ def main(argv):
         yaml.append("  - score: %d" % score)
         yaml.append("    type: min")
         yaml.append("    cases: " + json.dumps(id_cases))
-    
+
     yaml.append("")
     yaml.append("inputFile: " + json.dumps(name_prefix + "#.in"))
     yaml.append("outputFile: " + json.dumps(name_prefix + "#.ans"))
@@ -139,16 +151,17 @@ def main(argv):
 
     out_file = os.path.join(data_path, "tmp%d.zip" % random.randint(0, 65535))
 
-    with zipfile.ZipFile(out_file, "w", compression = zipfile.ZIP_DEFLATED) as z:
+    with zipfile.ZipFile(out_file, "w", compression=zipfile.ZIP_DEFLATED) as z:
         z.writestr('data.yml', '\n'.join(yaml))
         for src, dest in tasks:
             print("正在添加文件：%s => %s" % (src, dest))
             src = os.path.join(data_path, src)
             z.write(src, dest)
-    
+
     print("操作完成。")
     print("输出文件：%s" % out_file)
 
 
 if __name__ == "__main__":
     main(sys.argv[1:])
+    input("按下回车键以退出：")
