@@ -1,5 +1,19 @@
 [
     {
+        "name": "普通",
+        "description": "如 1-1.in",
+        "input": {
+            "pattern": "(.+)-(.+)\\.in",
+            "subtask": [1],
+            "case": [2]
+        },
+        "output": {
+            "pattern": "(.+)-(.+)\\.(out|ans)",
+            "subtask": [1],
+            "case": [2]
+        }
+    },
+    {
         "name": "子文件夹",
         "description": "适用于分子任务存放在子文件夹下的测试数据，如 subtask1/1.in",
         "input": {
@@ -23,6 +37,20 @@
         },
         "output": {
             "pattern": ".+\\((.+)\\)-\\((.+)\\)\\.(out|ans)",
+            "subtask": [1],
+            "case": [2]
+        }
+    },
+    {
+        "name": "JOI",
+        "description": "JOI",
+        "input": {
+            "pattern": "in/(\\d+)-(\\d+).txt",
+            "subtask": [1],
+            "case": [2]
+        },
+        "output": {
+            "pattern": "out/(\\d+)-(\\d+).txt",
             "subtask": [1],
             "case": [2]
         }
