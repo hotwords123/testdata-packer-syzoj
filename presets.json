@@ -45,12 +45,12 @@
         "name": "JOI",
         "description": "JOI",
         "input": {
-            "pattern": "in/(\\d+)-(\\d+).txt",
+            "pattern": "in/(sample|\\d+)-(\\d+).txt",
             "subtask": [1],
             "case": [2]
         },
         "output": {
-            "pattern": "out/(\\d+)-(\\d+).txt",
+            "pattern": "out/(sample|\\d+)-(\\d+).txt",
             "subtask": [1],
             "case": [2]
         }
